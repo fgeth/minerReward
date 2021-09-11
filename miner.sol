@@ -4,7 +4,7 @@ pragma solidity >0.4.24;
 contract MinerReward {
 	struct Miner{
 		address		coinbase;
-		bool		isMining ==false;
+		bool		isMining;
 		uint		blockNumber;	
 	}
 
@@ -12,32 +12,28 @@ contract MinerReward {
   event CreateMiner(address coinbase, bool isMining, uint blockNumber );
 
   string public version;
-  Miner[] public miners;
-
+  mapping (address => Miner) public miners;
+  
+  
   constructor() {
     version = "0.1.0";
   }
   
-   function getVersion()public pure returns (string memory){
+   function getVersion()public view returns (string memory){
     return version;
   }
 
-  function createMiner(address memory coinbase) external {
-			var Miner newMiner = coinbase;
-			newMiner.isMining = true;
-			newMiner.blockNumber = block.number;
+  function createMiner(address coinbase) external {
+			Miner memory newMiner = Miner(coinbase, true, block.number);
 			miners[coinbase]=newMiner;
 
 
   }
   
-  function stopMining(address memory coinbase){
-	var theMiner = miners[coinbase];
+  function stopMining(address coinbase) external{
+	Miner storage theMiner = miners[coinbase];
 	theMiner.isMining = false;
   }
   
-  function getMiners() public view returns (Miner[] memory){
-    return miners;
-  }
   
 }
