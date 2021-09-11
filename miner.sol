@@ -12,7 +12,8 @@ contract MinerReward {
   event CreateMiner(address coinbase, bool isMining, uint blockNumber );
 
   string public version;
-  mapping (address => Miner) public miners;
+  mapping (address => Miner) public Miners;
+  address[] public Addresses;
   
   
   constructor() {
@@ -25,15 +26,26 @@ contract MinerReward {
 
   function createMiner(address coinbase) external {
 			Miner memory newMiner = Miner(coinbase, true, block.number);
-			miners[coinbase]=newMiner;
+			Miners[coinbase]=newMiner;
+			bool minerExists = false;
+			for (uint i = 0; i < Addresses.length; i++) {
+				if (Addresses[i]==coinbase){
+					minerExists =true;
+				}
+			}
+			if(!minerExists){
+				Addresses.push(coinbase);
+			}
 
 
   }
   
   function stopMining(address coinbase) external{
-	Miner storage theMiner = miners[coinbase];
-	theMiner.isMining = false;
+	Miners[coinbase].isMining = false;
   }
   
+  function getMiners() public view returns (address[] memory){
+		return Addresses;
+  }
   
 }
