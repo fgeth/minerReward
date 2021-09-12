@@ -7,6 +7,7 @@ import (
 	"math/big"
 	"strings"
 
+	ethereum "github.com/fgeth/fgeth"
 	"github.com/fgeth/fgeth/accounts/abi"
 	"github.com/fgeth/fgeth/accounts/abi/bind"
 	"github.com/fgeth/fgeth/common"
